@@ -37,6 +37,9 @@ module XMonad.Actions.CycleWindows (
         -- * Cycling half the stack to get rid of a boring window
         -- $opposite
         rotOpposite', rotOpposite,
+        -- * Promoting focused window to the top of slave stack
+        -- $slave
+        promoteSlave', promoteSlave,
         -- * Cycling windows through the current frame
         -- $focused
         rotFocused', rotFocusedUp, rotFocusedDown, shiftToFocus',
@@ -181,7 +184,19 @@ rotOpposite' (W.Stack t l r) = W.Stack t' l' r'
         (l',t':r') =  second reverse . splitAt (length l) $
                                 reverse (take part rrvl ++ t : drop part rrvl)
 
+-- $slave
+-- Shifts the focused window up the slave area to top position (just below master),
+-- This is useful for people who use TwoPane and, while having focused window 
+-- in slave area, want to quickly switch to master and still have this window visible 
+-- in slave area. Effective in chain with focusMaster from StackSet.
+promoteSlave :: X() 
+promoteSlave = windows $ W.modify' promoteSlave'
 
+promoteSlave' :: W.Stack a -> W.Stack a
+promoteSlave' (W.Stack t l r) = W.Stack t' l' r'
+  where rvlr = reverse l ++ r
+        (l',t',r')=(take 1 rvlr,t,drop 1 rvlr)
+ 
 -- $focused
 -- Most people will want the @rotAllUp@ or @rotAllDown@ actions from
 -- "XMonad.Actions.RotSlaves" to cycle all windows in the stack.
