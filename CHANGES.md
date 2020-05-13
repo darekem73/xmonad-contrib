@@ -82,6 +82,11 @@
 
     - Added `recentWS` function which allows the recency list to be filtered with
       a user-provided predicate.
+      
+  * `XMonad.Actions.CycleWindows`
+  
+    - Added `promoteSlave` and `promoteSlave'` functions which allow promoting
+      focused window from the slave area to the top of slave stack.
 
   * `XMonad.Prompt.Window`
     
